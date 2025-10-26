@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vieronicka K - Computer Science Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Courier New', monospace;
+            background: #0a0e27;
+            color: #64ffda;
+            overflow-x: hidden;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #64ffda;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: 0.1s;
+            mix-blend-mode: difference;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #64ffda;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #8892b0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #64ffda;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .birthday-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b9d, #ffa06b);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .greeting {
+            font-size: 1.2rem;
+            color: #64ffda;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 5rem;
+            color: #ccd6f6;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .tagline {
+            font-size: 2.5rem;
+            color: #8892b0;
+            margin-bottom: 2rem;
+        }
+
+        .bio {
+            color: #8892b0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 2px solid #64ffda;
+            color: #64ffda;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .cta-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-3px);
+        }
+
+        section {
+            padding: 6rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #ccd6f6;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 50px;
+            height: 2px;
+            background: #64ffda;
+        }
+
+        .section-number {
+            color: #64ffda;
+            font-size: 1.5rem;
+        }
+
+        .experience-grid, .education-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .exp-card, .edu-card {
+            background: rgba(100, 255, 218, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            border-left: 3px solid #64ffda;
+            transition: all 0.3s;
+        }
+
+        .exp-card:hover, .edu-card:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateX(10px);
+        }
+
+        .exp-title, .edu-title {
+            font-size: 1.5rem;
+            color: #ccd6f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .exp-org, .edu-org {
+            color: #64ffda;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .exp-date, .edu-date {
+            color: #8892b0;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .exp-location {
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-category {
+            background: rgba(100, 255, 218, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .skill-category h3 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .skill-item {
+            color: #8892b0;
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-item::before {
+            content: '▹';
+            color: #64ffda;
+        }
+
+        .certifications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .cert-card {
+            background: rgba(100, 255, 218, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            transition: all 0.3s;
+        }
+
+        .cert-card:hover {
+            border-color: #64ffda;
+            transform: scale(1.05);
+        }
+
+        .cert-title {
+            color: #ccd6f6;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .contact-section {
+            text-align: center;
+            padding: 8rem 4rem;
+        }
+
+        .contact-title {
+            font-size: 3rem;
+            color: #ccd6f6;
+            margin-bottom: 1rem;
+        }
+
+        .contact-text {
+            color: #8892b0;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            padding: 1rem 2rem;
+            border: 2px solid #64ffda;
+            color: #64ffda;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(100, 255, 218, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 255, 218, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @media (max-width: 768px) {
+            nav, section, .hero {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+
+            .tagline {
+                font-size: 1.8rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="grid-bg"></div>
+
+    <nav>
+        <div class="logo">&lt;VK /&gt;</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#certifications">Certifications</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="birthday-badge">🎉 Happy Birthday Vieronicka! 🎂</div>
+            <div class="greeting">Hi, my name is</div>
+            <h1>Vieronicka K</h1>
+            <div class="tagline">I build things for the Internet of Things.</div>
+            <p class="bio">
+                I'm a Computer Science undergraduate at the University of Jaffna, specializing in IoT and passionate about 
+                creating innovative solutions that bridge the physical and digital worlds. Currently serving as Treasurer at CompSoc-UOJ 
+                and contributing to the tech community.
+            </p>
+            <a href="#contact" class="cta-btn">Get In Touch</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2 class="section-title">
+            <span class="section-number">01.</span> About Me
+        </h2>
+        <div class="bio">
+            <p style="margin-bottom: 1rem;">
+                Hello! I'm Vieronicka, a tech enthusiast from Colombo, Sri Lanka, currently pursuing my BSc (Hons) in Computer Science 
+                at the University of Jaffna. My journey in technology began at Colombo Ramanathan Hindu Ladies' College, and I've been 
+                passionate about leveraging technology to solve real-world problems ever since.
+            </p>
+            <p>
+                As Treasurer of CompSoc-UOJ, I combine my technical skills with leadership and team coordination. My experience as an 
+                IoT Practical Assistant has deepened my understanding of connected systems and their potential to transform industries.
+            </p>
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2 class="section-title">
+            <span class="section-number">02.</span> Experience
+        </h2>
+        <div class="experience-grid">
+            <div class="exp-card">
+                <div class="exp-title">Treasurer</div>
+                <div class="exp-org">CompSoc-UOJ</div>
+                <div class="exp-date">January 2024 - February 2025</div>
+                <div class="exp-location">Jaffna, Northern Province, Sri Lanka</div>
+            </div>
+            <div class="exp-card">
+                <div class="exp-title">Practical Assistant - IoT</div>
+                <div class="exp-org">University of Jaffna</div>
+                <div class="exp-date">January 2024 - March 2024</div>
+                <div class="exp-location">Jaffna, Northern Province, Sri Lanka</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <h2 class="section-title">
+            <span class="section-number">03.</span> Education
+        </h2>
+        <div class="education-grid">
+            <div class="edu-card">
+                <div class="edu-title">BSc (Hons) Computer Science - Undergraduate</div>
+                <div class="edu-org">University of Jaffna</div>
+                <div class="edu-date">January 2021 - Present</div>
+            </div>
+            <div class="edu-card">
+                <div class="edu-title">Primary to Advanced Level</div>
+                <div class="edu-org">Colombo Ramanathan Hindu Ladies' College</div>
+                <div class="edu-date">January 2005 - January 2018</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2 class="section-title">
+            <span class="section-number">04.</span> Skills & Technologies
+        </h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>Core Technologies</h3>
+                <div class="skill-item">Internet of Things (IoT)</div>
+                <div class="skill-item">Java</div>
+                <div class="skill-item">Python</div>
+                <div class="skill-item">C Programming</div>
+            </div>
+            <div class="skill-category">
+                <h3>Data Science</h3>
+                <div class="skill-item">Data Science Fundamentals</div>
+                <div class="skill-item">Python for Data Science</div>
+                <div class="skill-item">Data Analysis</div>
+            </div>
+            <div class="skill-category">
+                <h3>Leadership</h3>
+                <div class="skill-item">Team Coordination</div>
+                <div class="skill-item">Financial Management</div>
+                <div class="skill-item">Communication</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certifications">
+        <h2 class="section-title">
+            <span class="section-number">05.</span> Certifications
+        </h2>
+        <div class="certifications-grid">
+            <div class="cert-card">
+                <div class="cert-title">English Grammar and Vocabulary: Discussing Work (Advanced Level)</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-title">Introduction to C</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-title">Introduction to Data Science</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-title">Python for Beginners</div>
+            </div>
+            <div class="cert-card">
+                <div class="cert-title">Python Basics for Data Science (Verified)</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="contact-title">What's Next?</div>
+        <h2 style="font-size: 4rem; color: #ccd6f6; margin-bottom: 2rem;">Get In Touch</h2>
+        <p class="contact-text">
+            I'm always open to discussing new opportunities, innovative projects, or just having a chat about technology and IoT. 
+            Feel free to reach out!
+        </p>
+        <div class="contact-links">
+            <a href="mailto:vieronicka27@gmail.com" class="contact-btn">Email Me</a>
+            <a href="https://www.linkedin.com/in/vieronickak-9b758725b/" target="_blank" class="contact-btn">LinkedIn</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>Designed & Built with ❤️ for Vieronicka's Birthday</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">© 2025 Vieronicka K</p>
+    </footer>
+
+    <script>
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Particle effect on cursor
+        document.addEventListener('mousemove', (e) => {
+            if(Math.random() > 0.95) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                particle.style.background = '#64ffda';
+                particle.style.borderRadius = '50%';
+                particle.style.left = e.clientX + 'px';
+                particle.style.top = e.clientY + 'px';
+                particle.style.pointerEvents = 'none';
+                particle.style.opacity = '1';
+                particle.style.transition = 'opacity 1s, transform 1s';
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.style.opacity = '0';
+                    particle.style.transform = 'translateY(-30px)';
+                }, 10);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
